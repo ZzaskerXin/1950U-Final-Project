@@ -1,0 +1,298 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1,
+						3,
+						5,
+						6,
+						7
+					],
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-.-Debug-d0094a50bb2071803777.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.14"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1
+					]
+				},
+				{
+					"build" : "External/glfw-3.3.8",
+					"childIndexes" : 
+					[
+						2
+					],
+					"jsonFile" : "directory-External.glfw-3.3.8-Debug-3fb1d963e317eeb1937d.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.0"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 1,
+					"source" : "External/glfw-3.3.8"
+				},
+				{
+					"build" : "External/glfw-3.3.8/src",
+					"jsonFile" : "directory-External.glfw-3.3.8.src-Debug-1786c172a6e503e356d2.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.0"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 1,
+					"source" : "External/glfw-3.3.8/src",
+					"targetIndexes" : 
+					[
+						3,
+						7
+					]
+				},
+				{
+					"build" : "External/glm-master",
+					"childIndexes" : 
+					[
+						4
+					],
+					"jsonFile" : "directory-External.glm-master-Debug-765996dd4f354c442cd9.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.2"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 2,
+					"source" : "External/glm-master",
+					"targetIndexes" : 
+					[
+						6
+					]
+				},
+				{
+					"build" : "External/glm-master/glm",
+					"jsonFile" : "directory-External.glm-master.glm-Debug-f5fd9954acba0ea03ab6.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.2"
+					},
+					"parentIndex" : 3,
+					"projectIndex" : 2,
+					"source" : "External/glm-master/glm"
+				},
+				{
+					"build" : "External/freetype",
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-External.freetype-Debug-e7f981cee838688c55e8.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.0"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 3,
+					"source" : "External/freetype",
+					"targetIndexes" : 
+					[
+						2
+					]
+				},
+				{
+					"build" : "External/imgui-docking",
+					"jsonFile" : "directory-External.imgui-docking-Debug-c03d72c10186cb7d3ff1.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.1"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 4,
+					"source" : "External/imgui-docking",
+					"targetIndexes" : 
+					[
+						4
+					]
+				},
+				{
+					"build" : "External/raudio",
+					"jsonFile" : "directory-External.raudio-Debug-f601de3ba31340800759.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.11"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 5,
+					"source" : "External/raudio",
+					"targetIndexes" : 
+					[
+						5
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"childIndexes" : 
+					[
+						1,
+						2,
+						3,
+						4,
+						5
+					],
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "CS1950UEngine",
+					"targetIndexes" : 
+					[
+						0,
+						1
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						1,
+						2
+					],
+					"name" : "GLFW",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						3,
+						7
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						3,
+						4
+					],
+					"name" : "glm",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						6
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						5
+					],
+					"name" : "freetype",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						2
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						6
+					],
+					"name" : "imgui",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						4
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						7
+					],
+					"name" : "raudio",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						5
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "CS1950UEngine::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-CS1950UEngine-Debug-b4283b9a7d34a4d2b165.json",
+					"name" : "CS1950UEngine",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "StaticGLEW::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-StaticGLEW-Debug-c9ea0d45e3dd7a043343.json",
+					"name" : "StaticGLEW",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 5,
+					"id" : "freetype::@3073c08409fceffceeef",
+					"jsonFile" : "target-freetype-Debug-4c762195977db0917ecc.json",
+					"name" : "freetype",
+					"projectIndex" : 3
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "glfw::@5b18bc618cbb665fdc7d",
+					"jsonFile" : "target-glfw-Debug-4bd1d444cf96e1470d44.json",
+					"name" : "glfw",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 6,
+					"id" : "imgui::@5a808ccadea0e23810fa",
+					"jsonFile" : "target-imgui-Debug-cfc27a3b52c523d4941e.json",
+					"name" : "imgui",
+					"projectIndex" : 4
+				},
+				{
+					"directoryIndex" : 7,
+					"id" : "raudio::@64d833ef003725f94ad8",
+					"jsonFile" : "target-raudio-Debug-931b13920e56fb587c86.json",
+					"name" : "raudio",
+					"projectIndex" : 5
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "uninstall::@1cbb95302f16e4094343",
+					"jsonFile" : "target-uninstall-Debug-249cce60f226c9dbb773.json",
+					"name" : "uninstall",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "update_mappings::@5b18bc618cbb665fdc7d",
+					"jsonFile" : "target-update_mappings-Debug-ca8ab2d8155af9efc10f.json",
+					"name" : "update_mappings",
+					"projectIndex" : 1
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "C:/Users/l3093/Desktop/Stencil/cs1950u-stencil-ZzaskerXin/build/build-cs1950u-stencil-ZzaskerXin-Desktop_Qt_6_5_3_MinGW_64_bit-Debug",
+		"source" : "C:/Users/l3093/Desktop/Stencil/cs1950u-stencil-ZzaskerXin"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 7
+	}
+}
