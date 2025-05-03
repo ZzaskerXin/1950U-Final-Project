@@ -19,6 +19,10 @@ set(STB_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/External/stb")
 set(FREETYPE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/External/freetype")
 set(IMGUI_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/External/imgui-docking")
 set(RAUDIO_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/External/raudio")
+set(SCREEN_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Screen")
+set(ECS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Engine_Yang")
+set(ECS_COMPONENTS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Engine_Yang/Components")
+set(ECS_SYSTEMS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Engine_Yang/Systems")
 
 #GLFW settings
 set(BUILD_SHARED_LIBS OFF CACHE BOOL "")
@@ -51,6 +55,10 @@ include_directories(${GLFW_SOURCE_DIR}/include
                     ${PROJECT_SOURCE_DIR}
                     ${IMGUI_SOURCE_DIR}
                     ${RAUDIO_SOURCE_DIR}
+                    ${SCREEN_DIR}
+                    ${ECS_SYSTEMS_DIR}
+                    ${ECS_DIR}
+                    ${ECS_COMPONENTS_DIR}
                     )
 
 add_executable(${PROJECT_NAME}
@@ -125,6 +133,39 @@ add_executable(${PROJECT_NAME}
     Game1/collisionsystem.h
     Engine/UniformGrid.h
     Game1/aisystem.h
+
+    Screen/Screen.h
+    Screen/ScreenManager.h
+    Screen/ScreenManager.cpp
+
+    Engine_Yang/Component.h
+    Engine_Yang/GameObject.h
+    Engine_Yang/GameWorld.h
+    Engine_Yang/GameWorld.cpp
+    Engine_Yang/InputMap.h
+    Engine_Yang/System.h
+
+    Engine_Yang/Systems/CharacterControllerSystem.cpp
+    Engine_Yang/Systems/CharacterControllerSystem.h
+    Engine_Yang/Systems/DrawSystem.h
+    Engine_Yang/Systems/DrawSystem.cpp
+    Engine_Yang/Systems/CollisionSystem.cpp
+    Engine_Yang/Systems/CollisionSystem.h
+
+    Engine_Yang/Components/MeshComponent.h
+    Engine_Yang/Components/PhysicsComponent.h
+    Engine_Yang/Components/TransformComponent.h
+
+    Game_Parkour/GameScreen.h
+    Game_Parkour/GameScreen.cpp
+    Game_Parkour/MenuScreen.cpp
+    Game_Parkour/MenuScreen.h
+    Game_Parkour/Game.h
+    Game_Parkour/Game.cpp
+    Game_Parkour/WinScreen.cpp
+    Game_Parkour/WinScreen.h
+    Game_Parkour/LossScreen.cpp
+    Game_Parkour/LossScreen.h
 
 
 

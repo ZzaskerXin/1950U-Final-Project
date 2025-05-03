@@ -26,10 +26,14 @@ public:
     glm::vec3 getLook();
     void setUp(glm::vec3 newUp);
     glm::vec3 getUp();
+    void setFOV(float fov);
+    float getFOV() const;
+
 
 private:
     // Internal functions to update projection and view matrices
     void calculateProjection();
+    void calculateProjection2();
     void calculateView();
 
     int m_width;

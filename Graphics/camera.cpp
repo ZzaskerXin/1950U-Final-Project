@@ -94,6 +94,21 @@ void Camera::calculateProjection(){
     m_proj = glm::perspective(m_fov, m_aspect, m_near, m_far);
 }
 
+void Camera::calculateProjection2() {
+    m_aspect = static_cast<float>(m_width) / static_cast<float>(m_height);
+    float safeFOV = glm::clamp(m_fov, 30.0f, 89.9f); 
+    m_proj = glm::perspective(glm::radians(safeFOV), m_aspect, m_near, m_far);
+}
+
 void Camera::calculateView(){
     m_view = glm::lookAt(m_pos, m_pos+m_look, m_up);
+}
+
+void Camera::setFOV(float fov) {
+    m_fov = fov;
+    calculateProjection2(); 
+}
+
+float Camera::getFOV() const {
+    return m_fov;
 }
