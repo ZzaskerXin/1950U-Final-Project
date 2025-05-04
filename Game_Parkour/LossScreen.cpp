@@ -14,14 +14,14 @@ void LossScreen::InitializeMenu(std::string game_result) {
     gameWorld = std::make_shared<GameWorld>();
     // std::cout << "Starting LossScreen player" << std::endl;
 
-    auto uiText = std::make_shared<GameObject>(9999);
+    auto uiText = std::make_shared<GameObject_Yang>(9999);
     uiText->AddComponent<UIComponent>("Game Over! You " + game_result);
     gameWorld->AddGameObject(uiText);
 
     auto cameraSystem = std::make_shared<CameraSystem>();
     gameWorld->AddSystem(cameraSystem);
 
-    auto drawSystem = std::make_shared<DrawSystem>("text");
+    auto drawSystem = std::make_shared<DrawSystem_Yang>("text");
     gameWorld->AddSystem(drawSystem);
 
     std::cout << "ENd init Menu" << std::endl;

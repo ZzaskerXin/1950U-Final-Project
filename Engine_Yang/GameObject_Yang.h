@@ -2,17 +2,17 @@
 #include <unordered_map>
 #include <typeindex>
 #include <memory>
+#include "Component_Yang.h"
 
-class Component;
 
-class GameObject {
+class GameObject_Yang {
 private:
-    std::unordered_map<std::type_index, std::shared_ptr<Component>> components;
+    std::unordered_map<std::type_index, std::shared_ptr<Component_Yang>> components;
 
 public:
     int id;
     
-    explicit GameObject(int id) : id(id) {}
+    explicit GameObject_Yang(int id) : id(id) {}
 
     template <typename T, typename... Args>
     std::shared_ptr<T> AddComponent(Args&&... args) {

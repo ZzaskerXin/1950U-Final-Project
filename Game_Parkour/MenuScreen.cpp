@@ -9,20 +9,28 @@ MenuScreen_Parkour::MenuScreen_Parkour(std::shared_ptr<ScreenManager> manager) :
 
 void MenuScreen_Parkour::InitializeMenu() {
     // std::cout << "Starting MenuScreen_Parkour init" << std::endl;
-    std::cout << "Starting Menu" << std::endl;
+    std::cout << "Starting Menu for parkour game" << std::endl;
 
     gameWorld = std::make_shared<GameWorld>();
-    // std::cout << "Starting MenuScreen_Parkour player" << std::endl;
+    std::cout << "Starting MenuScreen_Parkour player" << std::endl;
 
-    auto uiText = std::make_shared<GameObject>(9999);
+    auto uiText = std::make_shared<GameObject_Yang>(9999);
     uiText->AddComponent<UIComponent>("Welcome to Daoli Parkour");
     gameWorld->AddGameObject(uiText);
+    std::cout << "add ui" << std::endl;
+
 
     auto cameraSystem = std::make_shared<CameraSystem>();
-    gameWorld->AddSystem(cameraSystem);
+    std::cout << "cam sys created" << std::endl;
 
-    auto drawSystem = std::make_shared<DrawSystem>("text");
+    gameWorld->AddSystem(cameraSystem);
+    std::cout << "add cam" << std::endl;
+
+
+    auto drawSystem = std::make_shared<DrawSystem_Yang>("text");
     gameWorld->AddSystem(drawSystem);
+    std::cout << "add draw sys" << std::endl;
+
 
     std::cout << "ENd init Menu" << std::endl;
 
@@ -44,7 +52,7 @@ void MenuScreen_Parkour::update(double deltaTime) {
 
 void MenuScreen_Parkour::draw() {
     if(screenManager->GetCurrentScreen().get() != this) return;
-
+    std::cout << "menu parkour drawing... " << std::endl;
     gameWorld->Draw();
     
 }

@@ -2,13 +2,13 @@
 #include "Screen.h"
 #include "ScreenManager.h"
 #include "GameWorld.h"
-#include "DrawSystem.h"
+#include "DrawSystem_Yang.h"
 #include "UIComponent.h"
 #include "CameraSystem.h"
 #include "Game.h"
 
 
-class MenuScreen_Parkour : public Screen {
+class MenuScreen_Parkour : public Screen_Yang {
 public:
     MenuScreen_Parkour(std::shared_ptr<ScreenManager> manager);
     void InitializeMenu();

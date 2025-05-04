@@ -1,18 +1,18 @@
 #pragma once
-#include "System.h"
-#include "GameObject.h"
+#include "System_Yang.h"
+#include "GameObject_Yang.h"
 #include <memory>
 #include "MeshComponent.h"
-#include "TransformComponent.h"
+#include "TransformComponent_Yang.h"
 #include <GLFW/glfw3.h>
 #include "GameWorld.h"
 
 
-class DrawSystem : public System {
+class DrawSystem_Yang : public System_Yang {
 private:
     std::string shaderName;
 public:
-    DrawSystem(const std::string& shader) : shaderName(shader) {} 
+DrawSystem_Yang(const std::string& shader) : shaderName(shader) {} 
 
     void Initialize();  
     void Render();

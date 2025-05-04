@@ -1,10 +1,10 @@
 #pragma once
-#include "Component.h"
+#include "Component_Yang.h"
 #include <string>
 #include <memory>
 #include "Graphics/global.h"
 
-class MeshComponent : public Component {
+class MeshComponent : public Component_Yang {
 public:
     std::string modelType;
     std::string shapeName;

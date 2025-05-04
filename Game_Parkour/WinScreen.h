@@ -2,12 +2,12 @@
 #include "Screen.h"
 #include "ScreenManager.h"
 #include "GameWorld.h"
-#include "DrawSystem.h"
+#include "DrawSystem_Yang.h"
 #include "UIComponent.h"
 #include "CameraSystem.h"
 
 
-class WinScreen : public Screen {
+class WinScreen : public Screen_Yang {
 public:
     WinScreen(std::shared_ptr<ScreenManager> manager);
     void InitializeMenu(std::string game_result);

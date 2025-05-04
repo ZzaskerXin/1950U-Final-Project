@@ -2,6 +2,7 @@
 
 #include "Game1/menuscreen.h"
 #include "Game1/gamescreen.h"
+#include "Game1/bus_screen.h"
 #include "Graphics/global.h"
 #include <memory>
 
@@ -22,6 +23,10 @@ public:
     void framebufferResizeEvent(int width, int height);
     void setScreen(std::shared_ptr<Screen> newScreen);
 
+    inline static int game_state = 0; 
+
+
 private:
     std::shared_ptr<Screen> currentScreen;
+    // 0 for menu, 1 if game parkour is done, 2 if game survive is done
 };

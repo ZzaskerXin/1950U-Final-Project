@@ -1,9 +1,9 @@
 #pragma once
-#include "Component.h"
+#include "Component_Yang.h"
 #include "glm/glm.hpp"
 #include <vector>
 
-class PhysicsComponent : public Component {
+class PhysicsComponent : public Component_Yang {
 public:
     glm::vec3 velocity = glm::vec3(0.0f);
     float gravity = -9.8f;

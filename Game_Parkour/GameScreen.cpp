@@ -14,16 +14,16 @@ std::vector<glm::vec3> ReduceConvexHull(const std::vector<glm::vec3>& points, in
 }
 
 
-std::shared_ptr<GameObject> CreateBlock(const glm::vec3& pos, 
+std::shared_ptr<GameObject_Yang> CreateBlock(const glm::vec3& pos, 
     const std::string& shape = "cube", 
     const std::string& texture = "wood.png", 
     bool isStatic = true, 
     float size = 0.5f, 
     float mass = 1.0f, 
     int id = 8888) {
-    auto block = std::make_shared<GameObject>(id);
-    block->AddComponent<TransformComponent>();
-    block->GetComponent<TransformComponent>()->transform.setPos(pos);
+    auto block = std::make_shared<GameObject_Yang>(id);
+    block->AddComponent<TransformComponent_Yang>();
+    block->GetComponent<TransformComponent_Yang>()->transform.setPos(pos);
     block->AddComponent<MeshComponent>("primitive", shape, texture);
     auto physics = block->AddComponent<PhysicsComponent>(size, mass);
 
@@ -46,7 +46,7 @@ std::shared_ptr<GameObject> CreateBlock(const glm::vec3& pos,
     return block;
 }
 
-std::shared_ptr<GameObject> CreateObjObject(const glm::vec3& pos, 
+std::shared_ptr<GameObject_Yang> CreateObjObject(const glm::vec3& pos, 
     const std::string& shapeName, 
     const std::string& shapePath,
     const std::string& texture="",
@@ -55,9 +55,9 @@ std::shared_ptr<GameObject> CreateObjObject(const glm::vec3& pos,
     float mass = 1.0f, 
     int id = 9999) {
 
-    auto obj = std::make_shared<GameObject>(id);
-    obj->AddComponent<TransformComponent>();
-    obj->GetComponent<TransformComponent>()->transform.setPos(pos);
+    auto obj = std::make_shared<GameObject_Yang>(id);
+    obj->AddComponent<TransformComponent_Yang>();
+    obj->GetComponent<TransformComponent_Yang>()->transform.setPos(pos);
     
     obj->AddComponent<MeshComponent>("custom", shapeName, texture);
 
@@ -91,12 +91,12 @@ void GameScreen_Parkour::InitializeGameWorld() {
     gameWorld = std::make_shared<GameWorld>();
     // std::cout << "Starting GameScreen_Parkour player" << std::endl;
 
-    auto player = std::make_shared<GameObject>(1001);
+    auto player = std::make_shared<GameObject_Yang>(1001);
 
     // std::cout << "Player created" << std::endl;
 
-    player->AddComponent<TransformComponent>();
-    player->GetComponent<TransformComponent>()->transform.setPos(glm::vec3(0, 3.0f, 0));
+    player->AddComponent<TransformComponent_Yang>();
+    player->GetComponent<TransformComponent_Yang>()->transform.setPos(glm::vec3(0, 3.0f, 0));
 
     // std::cout << "transform created" << std::endl;
 
@@ -201,10 +201,10 @@ void GameScreen_Parkour::InitializeGameWorld() {
     std::cout << "Starting GameScreen_Parkour draw" << std::endl;
 
 
-    auto drawSystem = std::make_shared<DrawSystem>("phong");
+    auto drawSystem = std::make_shared<DrawSystem_Yang>("phong");
     gameWorld->AddSystem(drawSystem);
 
-    auto collisionSystem = std::make_shared<CollisionSystem>();
+    auto collisionSystem = std::make_shared<CollisionSystem_Yang>();
     gameWorld->AddSystem(collisionSystem);
     gameWorld->AddSystem(characterController);
 
@@ -230,7 +230,7 @@ void GameScreen_Parkour::update(double deltaTime) {
     // timer += deltaTime;
     auto player = gameWorld->GetObjectById(1001);
     if (!player) return;
-    auto* transform = player->GetComponent<TransformComponent>();
+    auto* transform = player->GetComponent<TransformComponent_Yang>();
     if (!transform) return;
 
     glm::vec3 playerPos = transform->transform.getPos();

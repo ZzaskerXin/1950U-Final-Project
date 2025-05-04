@@ -1,13 +1,13 @@
 #pragma once
-#include "System.h"
-#include "GameObject.h"
+#include "System_Yang.h"
+#include "GameObject_Yang.h"
 #include "PhysicsComponent.h"
-#include "TransformComponent.h"
+#include "TransformComponent_Yang.h"
 #include <vector>
 #include <memory>
 #include "GameWorld.h"
 
-class CollisionSystem : public System {
+class CollisionSystem_Yang : public System_Yang {
 public:
     void Update(float deltaTime) override;
 
@@ -21,8 +21,8 @@ private:
                             const std::vector<glm::vec3>& shape1, 
                             const std::vector<glm::vec3>& shape2);
 
-    void ApplyCollisionResponse(GameObject* obj1, PhysicsComponent* physics1,
-                                GameObject* obj2, PhysicsComponent* physics2,
+    void ApplyCollisionResponse(GameObject_Yang* obj1, PhysicsComponent* physics1,
+                                GameObject_Yang* obj2, PhysicsComponent* physics2,
                                 const glm::vec3& mtv);
 
     // 🔹 GJK & EPA Helper Functions

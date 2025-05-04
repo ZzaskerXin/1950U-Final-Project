@@ -1,6 +1,7 @@
 #include "WinScreen.h"
 #include <iostream>
 #include "Game.h"
+#include "Game1/application.h"
 
 
 WinScreen::WinScreen(std::shared_ptr<ScreenManager> manager) : screenManager(manager) {
@@ -15,14 +16,14 @@ void WinScreen::InitializeMenu(std::string game_result) {
     gameWorld = std::make_shared<GameWorld>();
     // std::cout << "Starting WinScreen player" << std::endl;
 
-    auto uiText = std::make_shared<GameObject>(9999);
+    auto uiText = std::make_shared<GameObject_Yang>(9999);
     uiText->AddComponent<UIComponent>("Game Over! You " + game_result);
     gameWorld->AddGameObject(uiText);
 
     auto cameraSystem = std::make_shared<CameraSystem>();
     gameWorld->AddSystem(cameraSystem);
 
-    auto drawSystem = std::make_shared<DrawSystem>("text");
+    auto drawSystem = std::make_shared<DrawSystem_Yang>("text");
     gameWorld->AddSystem(drawSystem);
 
     std::cout << "ENd init Menu" << std::endl;
@@ -36,6 +37,7 @@ void WinScreen::update(double deltaTime) {
 
     gameWorld->Update(deltaTime);
     auto& inputMap = gameWorld->GetInputMap();
+    Application::game_state = 1;
     if (inputMap.IsKeyPressed(GLFW_KEY_ENTER)) {
         Game::switchToScreen("MENU");
 

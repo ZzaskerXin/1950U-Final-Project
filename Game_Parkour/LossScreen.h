@@ -2,14 +2,14 @@
 #include "Screen.h"
 #include "ScreenManager.h"
 #include "GameWorld.h"
-#include "DrawSystem.h"
+#include "DrawSystem_Yang.h"
 #include "UIComponent.h"
 #include "CameraSystem.h"
 #include "Game.h"
 
 
 
-class LossScreen : public Screen {
+class LossScreen : public Screen_Yang {
 public:
     LossScreen(std::shared_ptr<ScreenManager> manager);
     void InitializeMenu(std::string game_result);

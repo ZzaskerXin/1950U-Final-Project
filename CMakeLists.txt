@@ -138,23 +138,23 @@ add_executable(${PROJECT_NAME}
     Screen/ScreenManager.h
     Screen/ScreenManager.cpp
 
-    Engine_Yang/Component.h
-    Engine_Yang/GameObject.h
+    Engine_Yang/Component_Yang.h
+    Engine_Yang/GameObject_Yang.h
     Engine_Yang/GameWorld.h
     Engine_Yang/GameWorld.cpp
     Engine_Yang/InputMap.h
-    Engine_Yang/System.h
+    Engine_Yang/System_Yang.h
 
     Engine_Yang/Systems/CharacterControllerSystem.cpp
     Engine_Yang/Systems/CharacterControllerSystem.h
-    Engine_Yang/Systems/DrawSystem.h
-    Engine_Yang/Systems/DrawSystem.cpp
-    Engine_Yang/Systems/CollisionSystem.cpp
-    Engine_Yang/Systems/CollisionSystem.h
+    Engine_Yang/Systems/DrawSystem_Yang.h
+    Engine_Yang/Systems/DrawSystem_Yang.cpp
+    Engine_Yang/Systems/CollisionSystem_Yang.cpp
+    Engine_Yang/Systems/CollisionSystem_Yang.h
 
     Engine_Yang/Components/MeshComponent.h
     Engine_Yang/Components/PhysicsComponent.h
-    Engine_Yang/Components/TransformComponent.h
+    Engine_Yang/Components/TransformComponent_Yang.h
 
     Game_Parkour/GameScreen.h
     Game_Parkour/GameScreen.cpp
@@ -166,6 +166,10 @@ add_executable(${PROJECT_NAME}
     Game_Parkour/WinScreen.h
     Game_Parkour/LossScreen.cpp
     Game_Parkour/LossScreen.h
+
+
+    Game1/bus_screen.h
+    Game1/bus_screen.cpp
 
 
 

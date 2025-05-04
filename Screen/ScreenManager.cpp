@@ -7,7 +7,7 @@ ScreenManager::ScreenManager() : currentScreen(nullptr) {}
 
 #include <cassert>
 
-void ScreenManager::switchToScreen( std::string name, std::shared_ptr<Screen> newScreen) {
+void ScreenManager::switchToScreen( std::string name, std::shared_ptr<Screen_Yang> newScreen) {
     // std::cout << "ScreenManager address: " << this << std::endl;
 
     // std::cerr << "Attempting to switch to: " << name << std::endl;
@@ -28,10 +28,11 @@ void ScreenManager::switchToScreen( std::string name, std::shared_ptr<Screen> ne
     int width, height;
     glfwGetWindowSize(glfwGetCurrentContext(), &width, &height);
     if (currentScreen) {
+        std::cout << "new screen with name" << name << std::endl; 
         currentScreen->windowResizeEvent(width, height);
         currentScreen->framebufferResizeEvent(width, height);
     }
-    // std::cerr << "Switched to screen: " << name << std::endl;
+    std::cout << "Switched to screen: " << name << std::endl;
 }
 
 void ScreenManager::update(double deltaTime) {

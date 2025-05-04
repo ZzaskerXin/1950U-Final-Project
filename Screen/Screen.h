@@ -1,9 +1,9 @@
 #pragma once
 #include <memory>
 
-class Screen {
+class Screen_Yang {
 public:
-    virtual ~Screen() = default;
+    virtual ~Screen_Yang() = default;
     virtual void update(double deltaTime) = 0;
     virtual void draw() = 0;
     virtual void keyEvent(int key, int action) = 0;

@@ -3,12 +3,12 @@
 #include "ScreenManager.h"
 #include "GameWorld.h"
 #include "CharacterControllerSystem.h"
-#include "DrawSystem.h"
+#include "DrawSystem_Yang.h"
 #include "CameraSystem.h"
-#include "CollisionSystem.h"
+#include "CollisionSystem_Yang.h"
 #include "Game.h"
 
-class GameScreen_Parkour : public Screen {
+class GameScreen_Parkour : public Screen_Yang {
 public:
     GameScreen_Parkour(std::shared_ptr<ScreenManager> manager);
     void update(double deltaTime) override;

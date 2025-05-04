@@ -24,7 +24,14 @@ void Application::keyEvent(int key, int action)
 {
     if (action == GLFW_PRESS)
     {
-        if (key == GLFW_KEY_ENTER)
+        if (key == GLFW_KEY_ENTER && game_state == 0)
+        {
+            std::cout << "Switching to Game Parkour Screen\n";
+            setScreen(std::make_shared<BusScreen>());
+            std::cout << "setscreen game parkour done" << std::endl;
+        } 
+
+        if (key == GLFW_KEY_ENTER && game_state == 1)
         {
             std::cout << "Switching to GameScreen\n";
             setScreen(std::make_shared<GameScreen>());

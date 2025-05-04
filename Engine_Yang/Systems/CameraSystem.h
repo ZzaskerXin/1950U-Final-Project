@@ -1,11 +1,11 @@
 #pragma once
-#include "System.h"
+#include "System_Yang.h"
 #include "Graphics/global.h"
 #include "GameWorld.h"
-#include "TransformComponent.h"
+#include "TransformComponent_Yang.h"
 #include <memory>
 
-class CameraSystem : public System {
+class CameraSystem : public System_Yang {
 private:
     std::shared_ptr<Camera> camera;
     float yaw = 0.0f, pitch = 0.0f;
@@ -37,7 +37,7 @@ public:
         }
 
         for (auto& obj : objects) {
-            auto* transform = obj->GetComponent<TransformComponent>();
+            auto* transform = obj->GetComponent<TransformComponent_Yang>();
             if (transform) {
                 // Set camera position based on the camera mode
                 if (cameraMode == CameraMode::FirstPerson) {

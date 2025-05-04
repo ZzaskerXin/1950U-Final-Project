@@ -1,11 +1,11 @@
-#include "CollisionSystem.h"
+#include "CollisionSystem_Yang.h"
 #include <iostream>
 #include <limits>
 #include <glm/gtc/epsilon.hpp>
 
 // Transform convex hull to world space
-std::vector<glm::vec3> TransformHull(const std::vector<glm::vec3> &hull, GameObject *obj) {
-    glm::mat4 transform = obj->GetComponent<TransformComponent>()->transform.getModelMatrix();
+std::vector<glm::vec3> TransformHull(const std::vector<glm::vec3> &hull, GameObject_Yang *obj) {
+    glm::mat4 transform = obj->GetComponent<TransformComponent_Yang>()->transform.getModelMatrix();
     std::vector<glm::vec3> transformedHull;
     for (const auto &v : hull) {
         glm::vec4 worldPos = transform * glm::vec4(v, 1.0f);
@@ -14,11 +14,11 @@ std::vector<glm::vec3> TransformHull(const std::vector<glm::vec3> &hull, GameObj
     return transformedHull;
 }
 
-void CollisionSystem::Update(float deltaTime) {
+void CollisionSystem_Yang::Update(float deltaTime) {
     auto objects = gameWorld->GetObjects();
     bool anyCollisionDetected = false; 
 
-    std::vector<std::tuple<GameObject*, PhysicsComponent*, GameObject*, PhysicsComponent*, glm::vec3>> collisionPairs;
+    std::vector<std::tuple<GameObject_Yang*, PhysicsComponent*, GameObject_Yang*, PhysicsComponent*, glm::vec3>> collisionPairs;
 
     for (size_t i = 0; i < objects.size(); ++i) {
         for (size_t j = i + 1; j < objects.size(); ++j) {
@@ -59,7 +59,7 @@ void CollisionSystem::Update(float deltaTime) {
 }
 
 // GJK collision detection
-bool CollisionSystem::CheckCollision(const std::vector<glm::vec3> &shape1,
+bool CollisionSystem_Yang::CheckCollision(const std::vector<glm::vec3> &shape1,
                                      const std::vector<glm::vec3> &shape2,
                                      std::vector<glm::vec3> &simplex) {
     glm::vec3 direction = glm::vec3(1, 0, 0);
@@ -82,7 +82,7 @@ bool CollisionSystem::CheckCollision(const std::vector<glm::vec3> &shape1,
 }
 
 // Find the farthest point in a direction
-glm::vec3 CollisionSystem::Support(const std::vector<glm::vec3> &shape, const glm::vec3 &direction) {
+glm::vec3 CollisionSystem_Yang::Support(const std::vector<glm::vec3> &shape, const glm::vec3 &direction) {
     float maxDot = -FLT_MAX;
     glm::vec3 bestPoint;
 
@@ -96,7 +96,7 @@ glm::vec3 CollisionSystem::Support(const std::vector<glm::vec3> &shape, const gl
     return bestPoint;
 }
 
-glm::vec3 CollisionSystem::ComputeMTV(std::vector<glm::vec3>& simplex,
+glm::vec3 CollisionSystem_Yang::ComputeMTV(std::vector<glm::vec3>& simplex,
                                       const std::vector<glm::vec3>& shape1,
                                       const std::vector<glm::vec3>& shape2) {
     struct Face {
@@ -166,8 +166,8 @@ glm::vec3 CollisionSystem::ComputeMTV(std::vector<glm::vec3>& simplex,
 
     return glm::vec3(0, 0, 0); // 🚨 Last resort: return zero MTV if no correction found
 }
-void CollisionSystem::ApplyCollisionResponse(GameObject* obj1, PhysicsComponent* physics1,
-                                             GameObject* obj2, PhysicsComponent* physics2,
+void CollisionSystem_Yang::ApplyCollisionResponse(GameObject_Yang* obj1, PhysicsComponent* physics1,
+                                             GameObject_Yang* obj2, PhysicsComponent* physics2,
                                              const glm::vec3& mtv) {
     if (glm::length(mtv) < 0.0001f) return;
 
@@ -179,14 +179,14 @@ void CollisionSystem::ApplyCollisionResponse(GameObject* obj1, PhysicsComponent*
 
     if (isVerticalCollision) {
         if (!physics1->isStatic) {
-            obj1->GetComponent<TransformComponent>()->transform.translate(glm::vec3(0, mtv.y * MTV_FIX_FACTOR, 0));
+            obj1->GetComponent<TransformComponent_Yang>()->transform.translate(glm::vec3(0, mtv.y * MTV_FIX_FACTOR, 0));
             physics1->velocity.y = 0;
             if (mtv.y > 0) {
                 physics1->isGrounded = true;
             }
         }
         if (!physics2->isStatic) {
-            obj2->GetComponent<TransformComponent>()->transform.translate(glm::vec3(0, -mtv.y * MTV_FIX_FACTOR, 0));
+            obj2->GetComponent<TransformComponent_Yang>()->transform.translate(glm::vec3(0, -mtv.y * MTV_FIX_FACTOR, 0));
             physics2->velocity.y = 0;
             if (mtv.y < 0) {
                 physics2->isGrounded = true;
@@ -194,16 +194,16 @@ void CollisionSystem::ApplyCollisionResponse(GameObject* obj1, PhysicsComponent*
         }
     } else {
         if (!physics1->isStatic) {
-            obj1->GetComponent<TransformComponent>()->transform.translate(mtv * 0.9f);
+            obj1->GetComponent<TransformComponent_Yang>()->transform.translate(mtv * 0.9f);
         }
         if (!physics2->isStatic) {
-            obj2->GetComponent<TransformComponent>()->transform.translate(-mtv * 0.9f);
+            obj2->GetComponent<TransformComponent_Yang>()->transform.translate(-mtv * 0.9f);
         }
     }
 }
 
 // 🔹 Handle Simplex Cases for GJK
-bool CollisionSystem::HandleSimplex(std::vector<glm::vec3> &simplex, glm::vec3 &direction) {
+bool CollisionSystem_Yang::HandleSimplex(std::vector<glm::vec3> &simplex, glm::vec3 &direction) {
     if (simplex.size() == 2) {
         glm::vec3 A = simplex[1];
         glm::vec3 B = simplex[0];

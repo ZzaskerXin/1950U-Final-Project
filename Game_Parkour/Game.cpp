@@ -20,8 +20,10 @@ void Game::Initialize(std::shared_ptr<ScreenManager> manager) {
     std::cout << "Initializing game with ScreenManager: " << screenManager.get() << std::endl;
 
     // Start the game on the Menu Screen
-    screenManager->switchToScreen("GAME", std::make_shared<MenuScreen_Parkour>(screenManager));
-}
+    screenManager->switchToScreen("GAME", std::make_shared<GameScreen_Parkour>(screenManager));
+
+    std:: cout << "SCreenManager init finished!" << std:: endl;
+} 
 
 void Game::switchToScreen(const std::string& screenName) {
     if (!screenManager) {

@@ -1,17 +1,17 @@
-#include "DrawSystem.h"
+#include "DrawSystem_Yang.h"
 #include "Graphics/global.h"
 
 
-#include "DrawSystem.h"
+#include "DrawSystem_Yang.h"
 #include "Graphics/global.h"
 
-#include "DrawSystem.h"
+#include "DrawSystem_Yang.h"
 #include "Graphics/global.h"
 
 #include "CameraSystem.h"
 #include "UIComponent.h"
 
-void DrawSystem::Render() {
+void DrawSystem_Yang::Render() {
     if(shaderName=="text") {
         Global::graphics.setClearColor(glm::vec3(0.1f, 0.1f, 0.1f)); 
         Global::graphics.clearScreen(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -47,7 +47,7 @@ void DrawSystem::Render() {
         Global::graphics.bindShader(shaderName);
 
         for (auto& obj : gameWorld->GetObjects()) {
-            auto* transform = obj->GetComponent<TransformComponent>();
+            auto* transform = obj->GetComponent<TransformComponent_Yang>();
             auto* mesh = obj->GetComponent<MeshComponent>();
 
             if (!transform || !mesh ) continue;

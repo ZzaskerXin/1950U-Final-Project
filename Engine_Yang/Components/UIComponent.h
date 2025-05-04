@@ -1,10 +1,10 @@
 #pragma once
-#include "Component.h"
+#include "Component_Yang.h"
 #include "Graphics/global.h"
 #include <string>
 #include <glm/glm.hpp>
 
-class UIComponent : public Component {
+class UIComponent : public Component_Yang {
 public:
     std::string text;
     std::string font;

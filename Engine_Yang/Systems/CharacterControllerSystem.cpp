@@ -15,7 +15,7 @@ void CharacterControllerSystem::Update(float deltaTime) {
     }
 
     for (auto& obj : objects) {
-        auto* transform = obj->GetComponent<TransformComponent>();
+        auto* transform = obj->GetComponent<TransformComponent_Yang>();
         auto* physics = obj->GetComponent<PhysicsComponent>();
 
         if (!transform || !physics) continue;
