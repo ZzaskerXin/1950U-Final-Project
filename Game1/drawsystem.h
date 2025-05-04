@@ -13,7 +13,7 @@ public:
     }
 
     void render() {
-        Global::graphics.setClearColor(glm::vec4(0.0f, 0.5f, 1.0f, 1.0f));
+        Global::graphics.setClearColor(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
         Global::graphics.clearScreen(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         Global::graphics.bindShader("phong");
         Global::graphics.setGlobalData(glm::vec3(0.5f));

@@ -5,12 +5,9 @@ GameScreen ::GameScreen():
     drawsystem(std::make_shared<DrawSystem>()),
     controlsystem(std::make_shared<ControlSystem>()),
     collisionsystem(std::make_shared<CollisionSystem>()),
-    aisystem(std::make_shared<AISystem>()),
     transform(std::make_shared<ModelTransform>()),
     playerTransform(std::make_shared<ModelTransform>()),
-    targetTransform(std::make_shared<ModelTransform>()),
     playerobject(std::make_shared<gameobject>()),
-    targetobject(std::make_shared<gameobject>()),
     obstacleobjects()
 {
     srand(time(0));
@@ -31,20 +28,15 @@ GameScreen ::GameScreen():
     }
 
     shp = Global::graphics.getShape("quad");
-    player = Global::graphics.getShape("sphere");
-    target = Global::graphics.getShape("cube");
+    player = Global::graphics.getShape("cube");
     ob = Global::graphics.getShape("cylinder");
 
-    Global::graphics.addMaterial("texture", "Resources/Images/grass.png", 1);
-    Global::graphics.addMaterial("player", "Resources/Images/player.png", 1);
-    Global::graphics.addMaterial("target", "Resources/Images/target.png", 1);
-    Global::graphics.addMaterial("obstacle", "Resources/Images/ob.jpg", 1);
+    Global::graphics.addMaterial("player", "Resources/Images/brick.png", 1);
+    Global::graphics.addMaterial("obstacle", "Resources/Images/wood.png", 1);
 
     transform->scale(glm::vec3(1.0f, 1.0f, 1.0f));
     playerTransform ->scale(glm::vec3(1.0f, 1.0f, 1.0f));
     playerTransform->setPos(glm::vec3(0.0f, 0.5f, -5.0f));
-    targetTransform ->scale(glm::vec3(1.0f, 1.0f, 1.0f));
-    targetTransform->setPos(glm::vec3(0.0f, 0.5f, 5.0f));
     cam->setPos(glm::vec3(0.0f, 1.1f, -5.0f));
 
     int numObstacles = 5;
@@ -100,17 +92,10 @@ GameScreen ::GameScreen():
     playerobject->getComponent<RenderComponent>()->material = "player";
     playerobject->getComponent<TransformComponent>()->transform = playerTransform;
 
-    targetobject->addComponent<RenderComponent>();
-    targetobject->addComponent<TransformComponent>();
-    targetobject->getComponent<RenderComponent>()->shape=target;
-    targetobject->getComponent<RenderComponent>()->material = "target";
-    targetobject->getComponent<TransformComponent>()->transform = targetTransform;
-
     drawsystem->addGameObject(playerobject);
     for(auto& obstacleobject : obstacleobjects) {
         drawsystem->addGameObject(obstacleobject);
     }
-    drawsystem->addGameObject(targetobject);
 
     collisionsystem->setTerrain(vertices);
     controlsystem->setPlayer(playerobject);
@@ -126,32 +111,10 @@ void GameScreen::update(double deltaTime){
 
     controlsystem->update(deltaTime);
 
-    for (int i = 0; i < obstacles.size(); ++i) {
-        glm::vec3 pos = obstacles[i]->getPos();
-        std::cout << "[Debug] Obstacle " << i << " Position: " << glm::to_string(pos) << std::endl;
-    }
-
     glm::vec3 newPlayerPos = playerTransform->getPos();
     glm::vec3 look = cam->getLook();
 
-    timeSinceLastRepath += deltaTime;
-    if (timeSinceLastRepath >= 1.0f) {
-        int idx = rand() % obstacleobjects.size();
-        glm::vec3 pos = obstacleobjects[idx]->getComponent<TransformComponent>()->transform->getPos();
-        aisystem->addAgent(idx, pos, playerTransform->getPos());
-        timeSinceLastRepath = 0.0f;
-    }
-
-    aisystem->updateAgentDirectionsAndSpeeds(obstacleDirections, obstacleSpeeds, obstacleobjects, deltaTime);
-
-    playerAtTarget = glm::length(newPlayerPos - targetTransform->getPos()) < 1.0f;
-    if (playerAtTarget){
-        std::cout << "You won! Press R to restart.\n";
-        gameWon = true;
-    }
-    else {
-        playerTransform->setPos(newPlayerPos);
-    }
+    playerTransform->setPos(newPlayerPos);
 
     for (size_t i = 0; i < obstacles.size(); i++) {
         auto& obstacle = obstacles[i];
@@ -160,17 +123,8 @@ void GameScreen::update(double deltaTime){
         pos += obstacleDirections[i] * obstacleSpeeds[i] * static_cast<float>(deltaTime);
 
 
-        if (pos.x < -5.0f || pos.x > 5.0f) obstacleDirections[i].x *= -1;
-        if (pos.z < -5.0f || pos.z > 5.0f) obstacleDirections[i].z *= -1;
-
-        if (glm::length(pos - targetTransform->getPos()) < 1.0f) {
-            glm::vec3 toTarget = glm::normalize(pos - targetTransform->getPos());
-            glm::vec3 reflectDir = glm::reflect(obstacleDirections[i], toTarget);
-
-            float angleOffset = (rand() % 30 - 15) * (3.14159f / 180.0f);
-            glm::mat4 rotation = glm::rotate(glm::mat4(1.0f), angleOffset, glm::vec3(0, 1, 0));
-            obstacleDirections[i] = glm::vec3(rotation * glm::vec4(reflectDir, 0.0f));
-        }
+        if (pos.x < -7.0f || pos.x > 7.0f) obstacleDirections[i].x *= -1;
+        if (pos.z < -7.0f || pos.z > 7.0f) obstacleDirections[i].z *= -1;
 
         pos.y += collisionsystem->ellipsoidCollisionResponse(pos, glm::vec3(0.5f, 0.5f, 0.5f)).y;
 
@@ -227,10 +181,50 @@ void GameScreen::update(double deltaTime){
         }
     }
 
-    for (const auto& obstacle : obstacles) {
-        if (glm::length(newPlayerPos - obstacle->getPos()) < 1.0f) {
-            std::cout << "You got hit! Press R to restart.\n";
-            gameOver = true;
+    for (size_t i = 0; i < obstacles.size(); ++i) {
+        glm::vec3 obstaclePos = obstacles[i]->getPos();
+        float distance = glm::length(playerTransform->getPos() - obstaclePos);
+
+        if (distance < 1.0f) {
+            lives--;
+
+            if (lives <= 0) {
+                gameOver = true;
+            }
+            else {
+                cam->setPos(glm::vec3(0.0f, 1.1f, -5.0f));
+                cam->setLook(glm::vec3(0, 0, 1));
+                cameraDistance = 2.5f;
+
+                float boundary = 4.0f;
+                float minDistance = 1.5f;
+                for (size_t j = 0; j < obstacles.size(); j++) {
+                    glm::vec3 position;
+                    bool valid = false;
+
+                    while (!valid) {
+                        float x = -boundary + static_cast<float>(rand()) / RAND_MAX * (2 * boundary);
+                        float z = -boundary + static_cast<float>(rand()) / RAND_MAX * (2 * boundary);
+                        position = glm::vec3(x, 0.5f, z);
+
+                        valid = true;
+                        for (size_t k = 0; k < j; ++k) {
+                            if (glm::length(position - obstacles[k]->getPos()) < minDistance) {
+                                valid = false;
+                                break;
+                            }
+                        }
+                    }
+
+                    obstacles[j]->setPos(position);
+
+                    float dirX = (rand() % 2 == 0) ? 1.0f : -1.0f;
+                    float dirZ = (rand() % 2 == 0) ? 1.0f : -1.0f;
+                    obstacleDirections[j] = glm::vec3(dirX, 0.0f, dirZ);
+                    obstacleSpeeds[j] = 1.5f + static_cast<float>(rand()) / RAND_MAX * 2.0f;
+                }
+                playerTransform->setPos(glm::vec3(0.0f, 0.5f, -5.0f));
+            }
         }
     }
 
@@ -239,6 +233,13 @@ void GameScreen::update(double deltaTime){
     glm::vec3 camPos = playerPos + cameraOffset + glm::vec3(0.0f, 0.6f, 0.0f);
     glm::vec3 smoothCamPos = glm::mix(cam->getPos(), camPos, deltaTime * 1.25f);
     cam->setPos(smoothCamPos);
+
+    if (!gameOver && !gameWon) {
+        survivalTime += deltaTime;
+        if (survivalTime >= survivalThreshold) {
+            gameWon = true;
+        }
+    }
 }
 
 void GameScreen::draw(){
@@ -249,24 +250,37 @@ void GameScreen::draw(){
 
     if (gameOver) {
         Global::graphics.bindShader("text");
-        Global::graphics.drawUIText(Global::graphics.getFont("opensans"), "Game Over! Press R to Restart", glm::ivec2(160, 350), AnchorPoint::TopLeft, Global::graphics.getFramebufferSize().x, 0.5f, 0.1f, glm::vec3(1, 1, 1));
+        Global::graphics.drawUIText(Global::graphics.getFont("opensans"), "Game Over! Press R to Restart", glm::ivec2(130, 350), AnchorPoint::TopLeft, Global::graphics.getFramebufferSize().x, 0.5f, 0.1f, glm::vec3(1, 0, 0));
     }
     if (gameWon) {
         Global::graphics.bindShader("text");
-        Global::graphics.drawUIText(Global::graphics.getFont("opensans"), "You Win! Press R to Restart", glm::ivec2(160, 350), AnchorPoint::TopLeft, Global::graphics.getFramebufferSize().x, 0.5f, 0.1f, glm::vec3(1, 1, 1));
+        Global::graphics.drawUIText(Global::graphics.getFont("opensans"), "You survived 5 seconds! You win!", glm::ivec2(130, 350), AnchorPoint::TopLeft, Global::graphics.getFramebufferSize().x, 0.5f, 0.1f, glm::vec3(1, 0, 0));
     }
+
+    std::string livesText = "Lives: " + std::to_string(lives);
+    Global::graphics.bindShader("text");
+    Global::graphics.drawUIText(
+        Global::graphics.getFont("opensans"),
+        livesText,
+        glm::ivec2(20, 30),
+        AnchorPoint::TopLeft,
+        Global::graphics.getFramebufferSize().x,
+        0.5f,
+        0.1f,
+        glm::vec3(1.0f, 1.0f, 1.0f)
+        );
 }
 
 void GameScreen::keyEvent(int key, int action){
-        if (action == GLFW_PRESS) {
-            if (key == GLFW_KEY_R) {
-                resetGame();
-                return;
-            }
-            keyStates[key] = true;
-        } else if (action == GLFW_RELEASE) {
-            keyStates[key] = false;
+    if (action == GLFW_PRESS) {
+        if (key == GLFW_KEY_R) {
+            resetGame();
+            return;
         }
+        keyStates[key] = true;
+    } else if (action == GLFW_RELEASE) {
+        keyStates[key] = false;
+    }
 }
 
 void GameScreen::mousePosEvent(double xpos, double ypos){
@@ -346,12 +360,12 @@ void GameScreen::resetGame() {
         obstacleSpeeds[i] = 1.5f + static_cast<float>(rand()) / RAND_MAX * 2.0f;
     }
 
-    timeSinceLastRepath = 0.0;
-    aisystem->clearAgents();
+    survivalTime = 0.0;
 
     gameOver = false;
     gameWon = false;
-    playerAtTarget = false;
+
+    lives = 3;
 }
 
 void GameScreen::framebufferResizeEvent(int width, int height){

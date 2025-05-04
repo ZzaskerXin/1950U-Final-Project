@@ -65,7 +65,7 @@ public:
             newPos.y += mtv.y;
         }
 
-        float boundary = 5.0f;
+        float boundary = 7.0f;
         newPos.x = glm::clamp(newPos.x, -boundary, boundary);
         newPos.z = glm::clamp(newPos.z, -boundary, boundary);
         transform->setPos(newPos);

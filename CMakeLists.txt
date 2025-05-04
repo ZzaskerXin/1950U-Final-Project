@@ -132,7 +132,7 @@ add_executable(${PROJECT_NAME}
     Engine/collisioncomponent.h
     Game1/collisionsystem.h
     Engine/UniformGrid.h
-    Game1/aisystem.h
+
 
     Screen/Screen.h
     Screen/ScreenManager.h
