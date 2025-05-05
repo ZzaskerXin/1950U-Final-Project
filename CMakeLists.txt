@@ -170,6 +170,8 @@ add_executable(${PROJECT_NAME}
 
     Game1/bus_screen.h
     Game1/bus_screen.cpp
+    Engine/aicomponent.h
+    Game1/aisystem.h
 
 
 

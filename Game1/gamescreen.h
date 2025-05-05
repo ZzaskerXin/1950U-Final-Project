@@ -6,6 +6,7 @@
 #include <ctime>
 #include "drawsystem.h"
 #include "controlsystem.h"
+#include "aisystem.h"
 
 class GameScreen : public Screen
 {
@@ -29,6 +30,7 @@ private:
     std::shared_ptr<DrawSystem> drawsystem;
     std::shared_ptr<ControlSystem> controlsystem;
     std::shared_ptr<CollisionSystem> collisionsystem;
+    std::shared_ptr<AISystem> aisystem;
 
     std::shared_ptr<Camera> cam;
     std::shared_ptr<Shape> player;
@@ -54,10 +56,17 @@ private:
     const float maxDistance = 5.0f;
 
     double survivalTime = 0.0;
-    double survivalThreshold = 3.0;
+    double survivalThreshold = 25.0;
+
+    glm::vec3 playerRespawnPoint = glm::vec3(0.0f, 0.5f, -5.0f);
+    float avoidPlayerRadius = 2.0f;
 
     int lives = 3;
 
     bool gameOver = false;
     bool gameWon = false;
+
+    double aiTimer = 0.0;
+    double aiInterval = 1.5;
+
 };
