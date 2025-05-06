@@ -52,6 +52,9 @@ void Graphics::initialize(){
     std::cout<<"add font"<<std::endl;
     addFont("opensans", "Resources/Fonts/OpenSans.ttf");
     getFont("opensans");
+
+    addFont("DejaVuSans", "Resources/Fonts/DejaVuSans.ttf");
+    getFont("DejaVuSans");
 }
 
 void Graphics::initShapes() {

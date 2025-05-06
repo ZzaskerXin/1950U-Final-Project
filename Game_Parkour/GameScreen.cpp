@@ -80,6 +80,47 @@ GameScreen_Parkour::GameScreen_Parkour(std::shared_ptr<ScreenManager> manager) :
     
     InitializeGameWorld();
 }
+void addUIs(std::shared_ptr<GameWorld> gameWorld, int screenW, int screenH) {
+    // === 1. Bottom Left: n Hearts ===
+    int nHearts = 3;
+    for (int i = 0; i < nHearts; ++i) {
+        auto heart = std::make_shared<GameObject_Yang>(9000 + i);
+        heart->AddComponent<UIComponent>("♥");
+        auto comp = heart->GetComponent<UIComponent>();
+        comp->position = glm::ivec2(20 + i * 40, 40); // from bottom-left
+        comp->scale = 1.8f;
+        comp->color = glm::vec3(1.0f, 0.0f, 0.0f); // red
+        gameWorld->AddGameObject(heart);
+    }
+
+    // === 2. Bottom Right: Progress Bar ===
+    auto progressBar = std::make_shared<GameObject_Yang>(9100);
+    progressBar->AddComponent<UIComponent>("█████░░░░░");
+    auto compBar = progressBar->GetComponent<UIComponent>();
+    compBar->position = glm::ivec2(screenW - 200, 40);
+    compBar->scale = 1.2f;
+    compBar->color = glm::vec3(0.0f, 1.0f, 1.0f);
+    gameWorld->AddGameObject(progressBar);
+
+    // === 3. Top Right: Number Display ===
+    auto numberDisplay = std::make_shared<GameObject_Yang>(9200);
+    numberDisplay->AddComponent<UIComponent>("1♥23♥4♥5");
+    auto compNum = numberDisplay->GetComponent<UIComponent>();
+    compNum->position = glm::ivec2(screenW - 200, screenH - 60);
+    compNum->scale = 1.3f;
+    compNum->color = glm::vec3(1.0f, 1.0f, 0.0f);
+    gameWorld->AddGameObject(numberDisplay);
+
+    // === 4. Top Left: Static String ===
+    auto label = std::make_shared<GameObject_Yang>(9300);
+    label->AddComponent<UIComponent>("Level 1");
+    auto compLabel = label->GetComponent<UIComponent>();
+    compLabel->position = glm::ivec2(20, screenH - 60);
+    compLabel->scale = 1.2f;
+    compLabel->color = glm::vec3(0.8f, 0.8f, 0.8f);
+    gameWorld->AddGameObject(label);
+}
+
 
 void GameScreen_Parkour::InitializeGameWorld() {
     // std::cout << "Starting GameScreen_Parkour init" << std::endl;
@@ -90,6 +131,13 @@ void GameScreen_Parkour::InitializeGameWorld() {
 
     gameWorld = std::make_shared<GameWorld>();
     // std::cout << "Starting GameScreen_Parkour player" << std::endl;
+
+    auto uiText = std::make_shared<GameObject_Yang>(9999);
+    uiText->AddComponent<UIComponent>("UI test with phong shad " );
+    gameWorld->AddGameObject(uiText);
+
+    addUIs(gameWorld, framebufferWidth, framebufferHeight);
+
 
     auto player = std::make_shared<GameObject_Yang>(1001);
 
@@ -221,9 +269,7 @@ void GameScreen_Parkour::InitializeGameWorld() {
     //     std::cout << "Paused... Press Enter to continue." << std::endl;
     // std::cin.get();
 
-    auto uiText = std::make_shared<GameObject_Yang>(9999);
-    uiText->AddComponent<UIComponent>("UI test with phong shad " );
-    gameWorld->AddGameObject(uiText);
+    
 
 }
 
@@ -295,10 +341,13 @@ void GameScreen_Parkour::scrollEvent(double distance) {
 }
 
 void GameScreen_Parkour::framebufferResizeEvent(int width, int height) {
+    framebufferWidth = width;
+    framebufferHeight = height;
     auto cameraSystem = gameWorld->GetSystem<CameraSystem>();
     if (cameraSystem) {
         cameraSystem->framebufferResizeEvent(width, height);
     }
+    addUIs(gameWorld, framebufferWidth, framebufferHeight);
 }
 
 void GameScreen_Parkour::windowResizeEvent(int width, int height) {

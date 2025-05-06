@@ -42,4 +42,7 @@ private:
     void InitializeGameWorld();
 
     int state = 0; // -1 for loss, 0 for playing and 1 for win
+
+    int framebufferWidth = 800;
+int framebufferHeight = 600;
 };

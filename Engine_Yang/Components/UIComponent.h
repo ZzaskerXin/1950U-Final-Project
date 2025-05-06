@@ -15,7 +15,7 @@ public:
     glm::vec3 color;
 
     UIComponent(const std::string& text,
-                const std::string& font = "opensans",
+                const std::string& font = "DejaVuSans",
                 glm::ivec2 position = glm::ivec2(80, 260),
                 AnchorPoint anchor = AnchorPoint::TopLeft,
                 float scale = 1.0f,

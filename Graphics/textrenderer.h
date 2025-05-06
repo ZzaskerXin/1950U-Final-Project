@@ -7,7 +7,9 @@
 #include <memory>
 
 enum class AnchorPoint{
-    TopLeft, TopCenter, TopRight
+    TopLeft, TopCenter, TopRight,
+    BottomLeft, BottomCenter, BottomRight,
+    CenterLeft, Center, CenterRight
 };
 
 class TextRenderer{

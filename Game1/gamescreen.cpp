@@ -276,17 +276,17 @@ void GameScreen::draw(){
 
     if (gameOver) {
         Global::graphics.bindShader("text");
-        Global::graphics.drawUIText(Global::graphics.getFont("opensans"), "Game Over! Press R to Restart", glm::ivec2(130, 350), AnchorPoint::TopLeft, Global::graphics.getFramebufferSize().x, 0.5f, 0.1f, glm::vec3(1, 0, 0));
+        Global::graphics.drawUIText(Global::graphics.getFont("DejaVuSans"), "Game Over! Press R to Restart", glm::ivec2(130, 350), AnchorPoint::TopLeft, Global::graphics.getFramebufferSize().x, 0.5f, 0.1f, glm::vec3(1, 0, 0));
     }
     if (gameWon) {
         Global::graphics.bindShader("text");
-        Global::graphics.drawUIText(Global::graphics.getFont("opensans"), "You survived 25 seconds! You win!", glm::ivec2(130, 350), AnchorPoint::TopLeft, Global::graphics.getFramebufferSize().x, 0.5f, 0.1f, glm::vec3(1, 0, 0));
+        Global::graphics.drawUIText(Global::graphics.getFont("DejaVuSans"), "You survived 25 seconds! You win!", glm::ivec2(130, 350), AnchorPoint::TopLeft, Global::graphics.getFramebufferSize().x, 0.5f, 0.1f, glm::vec3(1, 0, 0));
     }
 
     std::string livesText = "Lives: " + std::to_string(lives);
     Global::graphics.bindShader("text");
     Global::graphics.drawUIText(
-        Global::graphics.getFont("opensans"),
+        Global::graphics.getFont("DejaVuSans"),
         livesText,
         glm::ivec2(20, 30),
         AnchorPoint::TopLeft,

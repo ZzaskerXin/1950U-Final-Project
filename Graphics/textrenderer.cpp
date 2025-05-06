@@ -1,6 +1,11 @@
 #include "textrenderer.h"
 #include "debug.h"
 
+#include <locale>
+#include <codecvt>
+
+
+
 void TextRenderer::initialize(){
     glGenVertexArrays(1, &m_vao);
     glGenBuffers(1, &m_vbo);
@@ -23,29 +28,72 @@ void TextRenderer::renderUIText(std::shared_ptr<Font> font, std::string text, gl
     float maxY = font->getCharacter(73).size.y * fontSize;
     float minY = - (font->getCharacter(106).size.y - font->getCharacter(106).bearing.y) * fontSize;
 
-    switch(anchorPoint){
-        case AnchorPoint::TopLeft:
-            x = anchorPosition.x;
-            y = anchorPosition.y - maxY;
-            break;
-        case AnchorPoint::TopCenter:
-            x = anchorPosition.x - textBoxWidth * 0.5f;
-            y = anchorPosition.y - maxY;
-            break;
-        case AnchorPoint::TopRight:
-            x = anchorPosition.x - textBoxWidth;
-            y = anchorPosition.y - maxY;
-            break;
-    }
+    GLint viewport[4];
+glGetIntegerv(GL_VIEWPORT, viewport);
+int windowWidth = viewport[2];
+int windowHeight = viewport[3];
+glm::vec2 screenSize = glm::vec2(windowWidth, windowHeight);
+
+switch (anchorPoint) {
+    case AnchorPoint::TopLeft:
+        x = anchorPosition.x;
+        y = screenSize.y - anchorPosition.y - maxY;
+        break;
+    case AnchorPoint::TopCenter:
+        x = anchorPosition.x - textBoxWidth * 0.5f;
+        y = screenSize.y - anchorPosition.y - maxY;
+        break;
+    case AnchorPoint::TopRight:
+        x = screenSize.x - anchorPosition.x - textBoxWidth;
+        y = screenSize.y - anchorPosition.y - maxY;
+        break;
+    case AnchorPoint::BottomLeft:
+        x = anchorPosition.x;
+        y = anchorPosition.y;
+        break;
+    case AnchorPoint::BottomCenter:
+        x = anchorPosition.x - textBoxWidth * 0.5f;
+        y = anchorPosition.y;
+        break;
+    case AnchorPoint::BottomRight:
+        x = screenSize.x - anchorPosition.x - textBoxWidth;
+        y = anchorPosition.y;
+        break;
+    case AnchorPoint::CenterLeft:
+        x = anchorPosition.x;
+        y = screenSize.y * 0.5f - (maxY - minY) * 0.5f;
+        break;
+    case AnchorPoint::Center:
+        x = anchorPosition.x - textBoxWidth * 0.5f;
+        y = screenSize.y * 0.5f - (maxY - minY) * 0.5f;
+        break;
+    case AnchorPoint::CenterRight:
+        x = screenSize.x - anchorPosition.x - textBoxWidth;
+        y = screenSize.y * 0.5f - (maxY - minY) * 0.5f;
+        break;
+    default:
+        x = anchorPosition.x;
+        y = screenSize.y - anchorPosition.y - maxY;
+        break;
+}
+
+
 
     float initX = x;
     float initY = y;
 
-    std::string::const_iterator c;
-    for (c = text.begin(); c != text.end(); c++)
-    {
-        Character ch = font->getCharacter(*c);
+    std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
+    std::wstring wtext = converter.from_bytes(text);
 
+    for (wchar_t c : wtext) {
+        Character ch;
+        try {
+            ch = font->getCharacter(c);
+        } catch (...) {
+            std::cerr << "[TextRenderer] Missing glyph for codepoint: " << std::hex << (int)c << std::endl;
+            continue;
+        }
+        
         float xpos = x + ch.bearing.x * fontSize;
         float ypos = y - (ch.size.y - ch.bearing.y) * fontSize;
 

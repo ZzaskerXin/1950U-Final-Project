@@ -23,8 +23,8 @@ void MenuScreen::draw(){
     Global::graphics.setClearColor(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
     Global::graphics.clearScreen(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     Global::graphics.bindShader("text");
-    Global::graphics.drawUIText(Global::graphics.getFont("opensans"), titleText, glm::ivec2(80, 260), AnchorPoint::TopLeft, Global::graphics.getFramebufferSize().x, 1.f, 0.1f, glm::vec3(0, 0, 0));
-    Global::graphics.drawUIText(Global::graphics.getFont("opensans"), "Press Enter to Start", glm::ivec2(82, 200), AnchorPoint::TopLeft, Global::graphics.getFramebufferSize().x, 0.5f, 0.1f, glm::vec3(0, 0, 0));
+    Global::graphics.drawUIText(Global::graphics.getFont("DejaVuSans"), titleText, glm::ivec2(80, 260), AnchorPoint::TopLeft, Global::graphics.getFramebufferSize().x, 1.f, 0.1f, glm::vec3(0, 0, 0));
+    Global::graphics.drawUIText(Global::graphics.getFont("DejaVuSans"), "Press Enter to Start", glm::ivec2(82, 200), AnchorPoint::TopLeft, Global::graphics.getFramebufferSize().x, 0.5f, 0.1f, glm::vec3(0, 0, 0));
 }
 
 void MenuScreen::keyEvent(int key, int action){
