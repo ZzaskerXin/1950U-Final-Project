@@ -201,7 +201,7 @@ void GameScreen_Parkour::InitializeGameWorld() {
     std::cout << "Starting GameScreen_Parkour draw" << std::endl;
 
 
-    auto drawSystem = std::make_shared<DrawSystem_Yang>("phong");
+    auto drawSystem = std::make_shared<DrawSystem_Yang>("combined");
     gameWorld->AddSystem(drawSystem);
 
     auto collisionSystem = std::make_shared<CollisionSystem_Yang>();
@@ -220,6 +220,10 @@ void GameScreen_Parkour::InitializeGameWorld() {
         // for debug
     //     std::cout << "Paused... Press Enter to continue." << std::endl;
     // std::cin.get();
+
+    auto uiText = std::make_shared<GameObject_Yang>(9999);
+    uiText->AddComponent<UIComponent>("UI test with phong shad " );
+    gameWorld->AddGameObject(uiText);
 
 }
 

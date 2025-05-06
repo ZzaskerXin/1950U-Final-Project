@@ -7,6 +7,7 @@
 #include "CameraSystem.h"
 #include "CollisionSystem_Yang.h"
 #include "Game.h"
+#include "UIComponent.h"
 
 class GameScreen_Parkour : public Screen_Yang {
 public:

@@ -12,39 +12,20 @@
 #include "UIComponent.h"
 
 void DrawSystem_Yang::Render() {
-    if(shaderName=="text") {
-        Global::graphics.setClearColor(glm::vec3(0.1f, 0.1f, 0.1f)); 
-        Global::graphics.clearScreen(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    Global::graphics.setClearColor(glm::vec3(0.1f, 0.1f, 0.1f)); 
+    std::shared_ptr<Camera> cam;
 
-        std::shared_ptr<Camera> cam = gameWorld->GetSystem<CameraSystem>()->GetCamera();
-        Global::graphics.setCameraData(cam);
-
-        Global::graphics.bindShader("text");
-        Global::graphics.setGlobalData(glm::vec3(0.5f));
-        Global::graphics.setCameraData(cam);
-
-
-        for (auto& obj : gameWorld->GetObjects()) {
-            auto* ui = obj->GetComponent<UIComponent>();
-            if (ui) {
-                Global::graphics.drawUIText(Global::graphics.getFont(ui->font), ui->text, 
-                    ui->position, ui->anchor, Global::graphics.getFramebufferSize().x, 
-                    ui->scale, ui->depth, ui->color);
-            }
-        }
-
-
-    }
-    if(shaderName == "phong") {
+    // if(shaderName == "phong" ) {
+    if(shaderName == "phong" || shaderName=="combined") {
+        Global::graphics.bindShader("phong");
 
         Global::graphics.setGlobalData(glm::vec3(0.5f));
-        std::shared_ptr<Camera> cam = gameWorld->GetSystem<CameraSystem>()->GetCamera();
+        cam = gameWorld->GetSystem<CameraSystem>()->GetCamera();
         Global::graphics.setCameraData(cam);
     
     
         Global::graphics.setClearColor(glm::vec3(1));
         Global::graphics.clearScreen(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        Global::graphics.bindShader(shaderName);
 
         for (auto& obj : gameWorld->GetObjects()) {
             auto* transform = obj->GetComponent<TransformComponent_Yang>();
@@ -72,4 +53,28 @@ void DrawSystem_Yang::Render() {
             }
         }
     }
+
+    if(shaderName=="text" || shaderName=="combined") {
+        if(shaderName == "text") Global::graphics.clearScreen(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        Global::graphics.bindShader("text");
+
+        cam = gameWorld->GetSystem<CameraSystem>()->GetCamera();
+        Global::graphics.setCameraData(cam);
+
+        Global::graphics.setGlobalData(glm::vec3(0.5f));
+        Global::graphics.setCameraData(cam);
+
+
+        for (auto& obj : gameWorld->GetObjects()) {
+            auto* ui = obj->GetComponent<UIComponent>();
+            if (ui) {
+                Global::graphics.drawUIText(Global::graphics.getFont(ui->font), ui->text, 
+                    ui->position, ui->anchor, Global::graphics.getFramebufferSize().x, 
+                    ui->scale, ui->depth, ui->color);
+            }
+        }
+
+
+    }
+    
 }
