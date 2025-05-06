@@ -44,5 +44,20 @@ private:
     int state = 0; // -1 for loss, 0 for playing and 1 for win
 
     int framebufferWidth = 800;
-int framebufferHeight = 600;
+    int framebufferHeight = 600;
+
+    int currentLives = 3;
+    float progressPercent = 0.6f;
+    int score = 12345;
+    std::string levelText = "Level 1: Reach the diamond block";
+
+    std::vector<int> heartIds; // e.g., 9000, 9001, 9002
+    int progressBarId = 9100;
+    int scoreDisplayId = 9200;
+    int levelLabelId = 9300;
+
+    void updateUI();
+
+    
+
 };

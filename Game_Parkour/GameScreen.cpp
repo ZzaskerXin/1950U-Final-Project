@@ -80,10 +80,12 @@ GameScreen_Parkour::GameScreen_Parkour(std::shared_ptr<ScreenManager> manager) :
     
     InitializeGameWorld();
 }
+
 void addUIs(std::shared_ptr<GameWorld> gameWorld, int screenW, int screenH) {
-    // === 1. Bottom Left: n Hearts ===
-    int nHearts = 3;
-    for (int i = 0; i < nHearts; ++i) {
+
+   
+    // === 1. Bottom Left: 3 Hearts ===
+    for (int i = 0; i < 3; ++i) {
         auto heart = std::make_shared<GameObject_Yang>(9000 + i);
         heart->AddComponent<UIComponent>("♥");
         auto comp = heart->GetComponent<UIComponent>();
@@ -93,33 +95,34 @@ void addUIs(std::shared_ptr<GameWorld> gameWorld, int screenW, int screenH) {
         gameWorld->AddGameObject(heart);
     }
 
-    // === 2. Bottom Right: Progress Bar ===
+    // === 2. Bottom Right: Progress Bar (ID 9100) ===
     auto progressBar = std::make_shared<GameObject_Yang>(9100);
     progressBar->AddComponent<UIComponent>("█████░░░░░");
     auto compBar = progressBar->GetComponent<UIComponent>();
-    compBar->position = glm::ivec2(screenW - 200, 40);
+    compBar->position = glm::ivec2(screenW - 200, 40); // margin from right edge
     compBar->scale = 1.2f;
-    compBar->color = glm::vec3(0.0f, 1.0f, 1.0f);
+    compBar->color = glm::vec3(0.0f, 1.0f, 1.0f); // cyan
     gameWorld->AddGameObject(progressBar);
 
-    // === 3. Top Right: Number Display ===
-    auto numberDisplay = std::make_shared<GameObject_Yang>(9200);
-    numberDisplay->AddComponent<UIComponent>("1♥23♥4♥5");
-    auto compNum = numberDisplay->GetComponent<UIComponent>();
-    compNum->position = glm::ivec2(screenW - 200, screenH - 60);
-    compNum->scale = 1.3f;
-    compNum->color = glm::vec3(1.0f, 1.0f, 0.0f);
-    gameWorld->AddGameObject(numberDisplay);
+    // === 3. Top Right: Score Display (ID 9200) ===
+    // auto scoreDisplay = std::make_shared<GameObject_Yang>(9200);
+    // scoreDisplay->AddComponent<UIComponent>("12345");
+    // auto compScore = scoreDisplay->GetComponent<UIComponent>();
+    // compScore->position = glm::ivec2(screenW - 200, screenH - 60); // top-right
+    // compScore->scale = 1.3f;
+    // compScore->color = glm::vec3(1.0f, 1.0f, 0.0f); // yellow
+    // gameWorld->AddGameObject(scoreDisplay);
 
-    // === 4. Top Left: Static String ===
+    // === 4. Top Left: Level Label (ID 9300) ===
     auto label = std::make_shared<GameObject_Yang>(9300);
-    label->AddComponent<UIComponent>("Level 1");
+    label->AddComponent<UIComponent>("Level 1: Reach the diamond block");
     auto compLabel = label->GetComponent<UIComponent>();
-    compLabel->position = glm::ivec2(20, screenH - 60);
+    compLabel->position = glm::ivec2(20, screenH - 60); // top-left
     compLabel->scale = 1.2f;
-    compLabel->color = glm::vec3(0.8f, 0.8f, 0.8f);
+    compLabel->color = glm::vec3(0.2f, 0.2f, 0.2f); // light gray
     gameWorld->AddGameObject(label);
 }
+
 
 
 void GameScreen_Parkour::InitializeGameWorld() {
@@ -132,11 +135,13 @@ void GameScreen_Parkour::InitializeGameWorld() {
     gameWorld = std::make_shared<GameWorld>();
     // std::cout << "Starting GameScreen_Parkour player" << std::endl;
 
-    auto uiText = std::make_shared<GameObject_Yang>(9999);
-    uiText->AddComponent<UIComponent>("UI test with phong shad " );
-    gameWorld->AddGameObject(uiText);
+    // auto uiText = std::make_shared<GameObject_Yang>(9999);
+    // uiText->AddComponent<UIComponent>("UI test with phong shad " );
+    // gameWorld->AddGameObject(uiText);
 
     addUIs(gameWorld, framebufferWidth, framebufferHeight);
+    for (int i = 0; i < 3; ++i)
+        heartIds.push_back(9000 + i);
 
 
     auto player = std::make_shared<GameObject_Yang>(1001);
@@ -272,12 +277,58 @@ void GameScreen_Parkour::InitializeGameWorld() {
     
 
 }
+void GameScreen_Parkour::updateUI() {
+    // === Update hearts ===
+    for (int i = 0; i < heartIds.size(); ++i) {
+        auto obj = gameWorld->GetObjectById(heartIds[i]);
+        if (!obj) continue;
+        auto* comp = obj->GetComponent<UIComponent>();
+        if (comp) {
+            comp->text = (i < currentLives) ? "♥" : " ";
+            comp->position = glm::ivec2(20 + i * 80, 40); // fixed bottom-left
+        }
+    }
+    
+    // === Update progress bar (bottom right) ===
+    if (auto obj = gameWorld->GetObjectById(progressBarId)) {
+        auto* comp = obj->GetComponent<UIComponent>();
+        if (comp) {
+            int filled = static_cast<int>(progressPercent * 10);
+            std::string full;
+            for (int i = 0; i < filled; ++i) full += "█";
+            for (int i = filled; i < 10; ++i) full += "░";
+            comp->text = full;
+            comp->position = glm::ivec2(framebufferWidth - 420, 40);
+        }
+    }
+
+    // === Update score display (top right) ===
+    if (auto obj = gameWorld->GetObjectById(scoreDisplayId)) {
+        auto* comp = obj->GetComponent<UIComponent>();
+        if (comp) {
+            comp->text = std::to_string(score);
+            comp->position = glm::ivec2(framebufferWidth - 200, framebufferHeight - 60);
+        }
+    }
+
+    // === Update level label (top left) ===
+    if (auto obj = gameWorld->GetObjectById(levelLabelId)) {
+        auto* comp = obj->GetComponent<UIComponent>();
+        if (comp) {
+            comp->text = levelText;
+            comp->position = glm::ivec2(20, framebufferHeight - 60);
+        }
+    }
+}
+
 
 void GameScreen_Parkour::update(double deltaTime) {
     // if(screenManager->GetCurrentScreen().get() != this) return;
 
     // static double timer = 0.0;
     // timer += deltaTime;
+
+    updateUI();
     auto player = gameWorld->GetObjectById(1001);
     if (!player) return;
     auto* transform = player->GetComponent<TransformComponent_Yang>();
@@ -286,6 +337,14 @@ void GameScreen_Parkour::update(double deltaTime) {
     glm::vec3 playerPos = transform->transform.getPos();
 
     gameWorld->Update(deltaTime);
+
+    glm::vec3 startPos = glm::vec3(0, 3.0f, 0);     // starting point
+    glm::vec3 goalPos = glm::vec3(2, 7, 16);        // final goal
+
+    float totalDist = glm::distance(startPos, goalPos);
+    float currentDist = glm::distance(startPos, playerPos);
+
+    progressPercent = std::clamp(currentDist / totalDist, 0.0f, 1.0f);
 
     
     glm::vec3 winPos = glm::vec3(2, 7, 16);
@@ -296,7 +355,18 @@ void GameScreen_Parkour::update(double deltaTime) {
     }
     
     if (playerPos.y < -5.0f) {  
-        state = -1; 
+        currentLives--;
+        if (currentLives <= 0) {
+            state = -1;
+        } else {
+            // Optionally reset player position
+            transform->transform.setPos(glm::vec3(0, 3.0f, 0));  // example respawn point
+            auto* physics = player->GetComponent<PhysicsComponent>();
+        if (physics) {
+            physics->velocity = glm::vec3(0.0f);
+            // physics->angularVelocity = glm::vec3(0.0f); // if used
+        }
+        }
     }
     // std::cout<< state<< std::endl;
     // std::cout<< playerPos.x << " " <<  playerPos.y<<  " " <<  playerPos.z <<std::endl;
@@ -347,7 +417,7 @@ void GameScreen_Parkour::framebufferResizeEvent(int width, int height) {
     if (cameraSystem) {
         cameraSystem->framebufferResizeEvent(width, height);
     }
-    addUIs(gameWorld, framebufferWidth, framebufferHeight);
+    // addUIs(gameWorld, framebufferWidth, framebufferHeight);
 }
 
 void GameScreen_Parkour::windowResizeEvent(int width, int height) {
