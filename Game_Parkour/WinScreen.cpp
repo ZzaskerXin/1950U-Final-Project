@@ -16,10 +16,27 @@ void WinScreen::InitializeMenu(std::string game_result) {
     gameWorld = std::make_shared<GameWorld>();
     // std::cout << "Starting WinScreen player" << std::endl;
 
-    auto uiText = std::make_shared<GameObject_Yang>(9999);
-    uiText->AddComponent<UIComponent>("Game Over! You " + game_result);
-    gameWorld->AddGameObject(uiText);
-
+    std::vector<std::string> lines = {
+        "You succeed! Now you have teleported to Tung Tung Tung Sahur's base.",
+        "Now there are only small Tung Tungs, but they can also threaten you.",
+        "Survive to show Tung Tung Tung Sahur your power to mess up his home,",
+        "so that he will give up his plot."
+    };
+    
+    int baseId = 9991;
+    int baseY = 350;
+    int lineSpacing = 40;
+    
+    for (int i = 0; i < lines.size(); ++i) {
+        auto uiText = std::make_shared<GameObject_Yang>(baseId + i);
+        uiText->AddComponent<UIComponent>(
+            lines[i],
+            "DejaVuSans",
+            glm::ivec2(130, baseY + i * lineSpacing)
+        );
+        gameWorld->AddGameObject(uiText);
+    }
+    
     auto cameraSystem = std::make_shared<CameraSystem>();
     gameWorld->AddSystem(cameraSystem);
 

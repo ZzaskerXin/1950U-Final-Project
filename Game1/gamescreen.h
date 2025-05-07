@@ -69,4 +69,6 @@ private:
     double aiTimer = 0.0;
     double aiInterval = 1.5;
 
+    void drawUI();
+
 };

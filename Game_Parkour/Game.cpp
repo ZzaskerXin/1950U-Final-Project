@@ -4,6 +4,7 @@
 #include "MenuScreen.h"
 #include "WinScreen.h"
 #include "LossScreen.h"
+#include "Game1/application.h"
 #include <iostream>
 
 // Global ScreenManager
@@ -20,7 +21,18 @@ void Game::Initialize(std::shared_ptr<ScreenManager> manager) {
     std::cout << "Initializing game with ScreenManager: " << screenManager.get() << std::endl;
 
     // Start the game on the Menu Screen
-    screenManager->switchToScreen("GAME", std::make_shared<GameScreen_Parkour>(screenManager));
+    if(Application::game_state == 0) {
+        screenManager->switchToScreen("GAME", std::make_shared<GameScreen_Parkour>(screenManager));
+    }
+    else if(Application::game_state == -1) {
+        screenManager->switchToScreen("LOSS", std::make_shared<GameScreen_Parkour>(screenManager));
+
+    }
+
+    else if(Application::game_state == 3) {
+        screenManager->switchToScreen("WIN2", std::make_shared<GameScreen_Parkour>(screenManager));
+
+    }
 
     std:: cout << "SCreenManager init finished!" << std:: endl;
 } 

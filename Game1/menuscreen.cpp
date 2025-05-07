@@ -3,7 +3,7 @@
 MenuScreen ::MenuScreen():
     cam(std::make_shared<Camera>())
 {
-    titleText = "Dodge the Pillars";
+    titleText = "Easy Adventure";
 }
 
 MenuScreen ::~MenuScreen(){}
@@ -24,7 +24,30 @@ void MenuScreen::draw(){
     Global::graphics.clearScreen(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     Global::graphics.bindShader("text");
     Global::graphics.drawUIText(Global::graphics.getFont("DejaVuSans"), titleText, glm::ivec2(80, 260), AnchorPoint::TopLeft, Global::graphics.getFramebufferSize().x, 1.f, 0.1f, glm::vec3(0, 0, 0));
-    Global::graphics.drawUIText(Global::graphics.getFont("DejaVuSans"), "Press Enter to Start", glm::ivec2(82, 200), AnchorPoint::TopLeft, Global::graphics.getFramebufferSize().x, 0.5f, 0.1f, glm::vec3(0, 0, 0));
+    std::vector<std::string> lines = {
+        "Your name is Daoli, and you accidentally found the dark plot of",
+        "Tung Tung Tung Tung Tung Tung Tung Tung Tung Sahur.",
+        "To stop him, you plan to go to his base through the diamond portal,",
+        "and show him your power to stop his plot.",
+        "Press Enter to Start"
+    };
+    
+    int startY = 400;
+    int lineHeight = 25;
+    
+    for (int i = 0; i < lines.size(); ++i) {
+        Global::graphics.drawUIText(
+            Global::graphics.getFont("DejaVuSans"),
+            lines[i],
+            glm::ivec2(82, startY + i * lineHeight),
+            AnchorPoint::TopLeft,
+            Global::graphics.getFramebufferSize().x,
+            0.5f,
+            0.1f,
+            glm::vec3(0, 0, 0)
+        );
+    }
+    
 }
 
 void MenuScreen::keyEvent(int key, int action){

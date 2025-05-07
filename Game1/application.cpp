@@ -37,6 +37,12 @@ void Application::keyEvent(int key, int action)
             setScreen(std::make_shared<GameScreen>());
         }
 
+        if (key == GLFW_KEY_ENTER && game_state == -1)
+        {
+            std::cout << "Switching to LoseScreen\n";
+            setScreen(std::make_shared<GameScreen>());
+        }
+
         if (key == GLFW_KEY_BACKSPACE)
         {
             std::cout << "Switching to MenuScreen\n";

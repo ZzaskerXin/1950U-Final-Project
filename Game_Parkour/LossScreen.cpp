@@ -15,7 +15,9 @@ void LossScreen::InitializeMenu(std::string game_result) {
     // std::cout << "Starting LossScreen player" << std::endl;
 
     auto uiText = std::make_shared<GameObject_Yang>(9999);
-    uiText->AddComponent<UIComponent>("Game Over! You " + game_result);
+    uiText->AddComponent<UIComponent>("Game Over! You failed to beat his dark plot!",  "DejaVuSans", glm::ivec2(130, 350));
+    // Global::graphics.drawUIText(Global::graphics.getFont("DejaVuSans"), "Game Over! You failed to beat his dark plot!", glm::ivec2(130, 350), AnchorPoint::TopLeft, Global::graphics.getFramebufferSize().x, 0.5f, 0.1f, glm::vec3(1, 0, 0));
+
     gameWorld->AddGameObject(uiText);
 
     auto cameraSystem = std::make_shared<CameraSystem>();

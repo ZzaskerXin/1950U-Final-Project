@@ -1,4 +1,5 @@
 #include "gamescreen.h"
+#include "Game1/application.h"
 
 GameScreen ::GameScreen():
     cam(std::make_shared<Camera>()),
@@ -29,10 +30,10 @@ GameScreen ::GameScreen():
     }
 
     shp = Global::graphics.getShape("quad");
-    player = Global::graphics.getShape("cube");
+    player = Global::graphics.getShape("sphere");
     ob = Global::graphics.getShape("cylinder");
 
-    Global::graphics.addMaterial("player", "Resources/Images/brick.png", 1);
+    Global::graphics.addMaterial("player", "Resources/Images/daoli_.png", 1);
     Global::graphics.addMaterial("obstacle", "Resources/Images/wood.png", 1);
 
     transform->scale(glm::vec3(1.0f, 1.0f, 1.0f));
@@ -136,7 +137,10 @@ GameScreen ::~GameScreen(){}
 
 void GameScreen::update(double deltaTime){
 
-    if (gameOver || gameWon) return;
+    if (gameOver || gameWon) {
+        
+        return;
+    } 
 
     controlsystem->update(deltaTime);
     aiTimer += deltaTime;
@@ -209,6 +213,7 @@ void GameScreen::update(double deltaTime){
             lives--;
             if (lives <= 0) {
                 gameOver = true;
+                // Application::game_state=-1;
             } else {
                 playerTransform->setPos(glm::vec3(0.0f, 0.5f, -5.0f));
                 cam->setPos(glm::vec3(0.0f, 1.1f, -5.0f));
@@ -268,33 +273,105 @@ void GameScreen::update(double deltaTime){
     }
 }
 
+void GameScreen::drawUI() {
+    Global::graphics.bindShader("text");
+
+    auto screenW = Global::graphics.getFramebufferSize().x;
+    auto screenH = Global::graphics.getFramebufferSize().y;
+
+    // === 1. Bottom Left: Hearts ===
+    for (int i = 0; i < 3; ++i) {
+        bool filled = (i < lives);
+        if(!filled) break;
+        Global::graphics.drawUIText(
+            Global::graphics.getFont("DejaVuSans"),
+            filled ? "♥" : " ",
+            glm::ivec2(20 + i * 80, 40),
+            AnchorPoint::TopLeft,
+            screenW,
+            1.8f,
+            0.1f,
+            glm::vec3(1.0f, 0.0f, 0.0f)
+        );
+    }
+
+    // === 2. Bottom Right: Progress Bar ===
+    int filled = static_cast<int>((survivalTime / survivalThreshold) * 10.0f);
+    filled = glm::clamp(filled, 0, 10);
+    std::string progressText;
+    for (int i = 0; i < filled; ++i) progressText += "█";
+    for (int i = filled; i < 10; ++i) progressText += "░";
+
+    Global::graphics.drawUIText(
+        Global::graphics.getFont("DejaVuSans"),
+        progressText,
+        glm::ivec2(screenW - 420, 40),
+        AnchorPoint::TopLeft,
+        screenW,
+        1.2f,
+        0.1f,
+        glm::vec3(0.0f, 1.0f, 1.0f)
+    );
+
+    // === 3. Top Right: Score display ===
+    Global::graphics.drawUIText(
+        Global::graphics.getFont("DejaVuSans"),
+        std::to_string(static_cast<int>(survivalTime)),  // fake score
+        glm::ivec2(screenW - 200, screenH - 60),
+        AnchorPoint::TopLeft,
+        screenW,
+        1.3f,
+        0.1f,
+        glm::vec3(1.0f, 1.0f, 0.0f)
+    );
+
+    // === 4. Top Left: Level label ===
+    Global::graphics.drawUIText(
+        Global::graphics.getFont("DejaVuSans"),
+        "Level 2: Survive 25s among TUNG TUNG TUNG",
+        glm::ivec2(20, screenH - 60),
+        AnchorPoint::TopLeft,
+        screenW,
+        1.2f,
+        0.1f,
+        glm::vec3(0.2f, 0.2f, 0.2f)
+    );
+}
+
+
 void GameScreen::draw(){
     drawsystem->render();
 
     transform->setPos(glm::vec3(0.0f, 0.0f, 0.0f));
     Global::graphics.drawObj("ground", transform->getModelMatrix());
 
+    drawUI();
+
+
     if (gameOver) {
+        Global::graphics.clearScreen(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         Global::graphics.bindShader("text");
-        Global::graphics.drawUIText(Global::graphics.getFont("DejaVuSans"), "Game Over! Press R to Restart", glm::ivec2(130, 350), AnchorPoint::TopLeft, Global::graphics.getFramebufferSize().x, 0.5f, 0.1f, glm::vec3(1, 0, 0));
+        Global::graphics.drawUIText(Global::graphics.getFont("DejaVuSans"), "Game Over! You failed to beat his dark plot!", glm::ivec2(130, 350), AnchorPoint::TopLeft, Global::graphics.getFramebufferSize().x, 0.5f, 0.1f, glm::vec3(1, 0, 0));
     }
     if (gameWon) {
+        Global::graphics.clearScreen(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         Global::graphics.bindShader("text");
-        Global::graphics.drawUIText(Global::graphics.getFont("DejaVuSans"), "You survived 25 seconds! You win!", glm::ivec2(130, 350), AnchorPoint::TopLeft, Global::graphics.getFramebufferSize().x, 0.5f, 0.1f, glm::vec3(1, 0, 0));
+        Global::graphics.drawUIText(Global::graphics.getFont("DejaVuSans"), "You survived 25 seconds! You have shown your power and beaten his dark plot!", glm::ivec2(130, 350), AnchorPoint::TopLeft, Global::graphics.getFramebufferSize().x, 0.5f, 0.1f, glm::vec3(1, 0, 0));
     }
 
-    std::string livesText = "Lives: " + std::to_string(lives);
-    Global::graphics.bindShader("text");
-    Global::graphics.drawUIText(
-        Global::graphics.getFont("DejaVuSans"),
-        livesText,
-        glm::ivec2(20, 30),
-        AnchorPoint::TopLeft,
-        Global::graphics.getFramebufferSize().x,
-        0.5f,
-        0.1f,
-        glm::vec3(1.0f, 1.0f, 1.0f)
-        );
+    // std::string livesText = "Lives: " + std::to_string(lives);
+    // Global::graphics.bindShader("text");
+    // Global::graphics.drawUIText(
+    //     Global::graphics.getFont("DejaVuSans"),
+    //     livesText,
+    //     glm::ivec2(20, 30),
+    //     AnchorPoint::TopLeft,
+    //     Global::graphics.getFramebufferSize().x,
+    //     0.5f,
+    //     0.1f,
+    //     glm::vec3(1.0f, 1.0f, 1.0f)
+    //     );
+
 }
 
 void GameScreen::keyEvent(int key, int action){
