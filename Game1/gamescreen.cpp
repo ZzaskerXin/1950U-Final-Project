@@ -1,5 +1,4 @@
 #include "gamescreen.h"
-#include "Game1/application.h"
 
 GameScreen ::GameScreen():
     cam(std::make_shared<Camera>()),
@@ -39,6 +38,7 @@ GameScreen ::GameScreen():
     transform->scale(glm::vec3(1.0f, 1.0f, 1.0f));
     playerTransform ->scale(glm::vec3(1.0f, 1.0f, 1.0f));
     playerTransform->setPos(glm::vec3(0.0f, 0.5f, -5.0f));
+    playerTransform->rotate(glm::radians(-225.0f), glm::vec3(0.0f, 1.0f, 0.0f));
     cam->setPos(glm::vec3(0.0f, 1.1f, -5.0f));
 
     int numObstacles = 5;
@@ -215,7 +215,11 @@ void GameScreen::update(double deltaTime){
                 gameOver = true;
                 // Application::game_state=-1;
             } else {
+                playerTransform = std::make_shared<ModelTransform>();
                 playerTransform->setPos(glm::vec3(0.0f, 0.5f, -5.0f));
+                playerTransform->scale(glm::vec3(1.0f, 1.0f, 1.0f));
+                playerTransform->rotate(glm::radians(-225.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+                playerobject->getComponent<TransformComponent>()->transform = playerTransform;
                 cam->setPos(glm::vec3(0.0f, 1.1f, -5.0f));
                 cam->setLook(glm::vec3(0, 0, 1));
                 cameraDistance = 2.5f;
@@ -432,6 +436,7 @@ void GameScreen::resetGame() {
     playerTransform = std::make_shared<ModelTransform>();
     playerTransform->setPos(glm::vec3(0.0f, 0.5f, -5.0f));
     playerTransform->scale(glm::vec3(1.0f, 1.0f, 1.0f));
+    playerTransform->rotate(glm::radians(-225.0f), glm::vec3(0.0f, 1.0f, 0.0f));
     playerobject->getComponent<TransformComponent>()->transform = playerTransform;
 
     cameraDistance = 2.5f;
