@@ -124,6 +124,8 @@ add_executable(${PROJECT_NAME}
 
 
     Engine/system.h
+    Engine/miniaudio.h
+    Engine/miniaudio_wrapper.cpp
     Engine/gameobject.h
     Engine/rendercomponent.h
     Engine/transformcomponent.h
